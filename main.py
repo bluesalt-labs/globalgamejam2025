@@ -1,5 +1,6 @@
 # Example file showing a basic pygame "game loop"
 import pygame
+import random
 
 def main():
 
@@ -11,32 +12,37 @@ def main():
     dt = 0
 
     player_speed = 400
-    object_speed = 300
+    object_speed = 100
+
+    slope_start_range = 365, 831
 
     player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() - 75)
-    image = pygame.image.load("images/forog1.gif")
-
+    player_image = pygame.image.load("images/forog4.gif")
+    tree_image = pygame.image.load("images/tree1.png")
+    tree_image.set_colorkey((255,255,255))
     trees = []
-    tree_points = ((-40,20),(0,-60),(40,20),(10,20),(10,50),(-10,50),(-10,20),(-40,20))
-    new_tree = []
-    for point in tree_points:
-        new_point = point[0]+500, point[1]+500
-        new_tree.append(new_point)
-    trees.append(new_tree)
-    new_tree = []
-    for point in tree_points:
-        new_point = point[0]*2+900, point[1]*2+500
-        new_tree.append(new_point)
-    trees.append(new_tree)
+    # tree_points = ((-40,20),(0,-60),(40,20),(10,20),(10,50),(-10,50),(-10,20),(-40,20))
+    # new_tree = []
+    # for point in tree_points:
+    #     new_point = point[0]+500, point[1]+500
+    #     new_tree.append(new_point)
+    # trees.append(new_tree)
+    # new_tree = []
+    # for point in tree_points:
+    #     new_point = point[0]*2+900, point[1]*2+500
+    #     new_tree.append(new_point)
+    # trees.append(new_tree)
 
-    new_tree = []
-    for point in tree_points:
-        new_point = point[0]*.5+600, point[1]*.5+450
-        new_tree.append(new_point)
-    trees.append(new_tree)
+    # new_tree = []
+    # for point in tree_points:
+    #     new_point = point[0]*.5+600, point[1]*.5+450
+    #     new_tree.append(new_point)
+    # trees.append(new_tree)
+
+    trees.append([500, 500, 1])
+    trees.append([900, 500, 2])    
+    trees.append([600, 450, 0.5])
     
-    
-    print(tuple(new_tree))
     while running:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
@@ -62,14 +68,23 @@ def main():
         pygame.draw.polygon(screen, "light grey", ((1280, 200), (1280, 720), (300, 720)))
         #ride surface
         pygame.draw.polygon(screen, "white", ((0,720), (365, 438), (831,438), (1280, 720)))
+
+        
         
         # Handle/Draw trees
         # Add new trees?
         for tree in trees:
-            pygame.draw.polygon(screen, "green", tuple(tree))
+            tree[1] += object_speed * dt
+            print(tree[0])
+            if tree[1] > 720:
+                tree[1] = 450
+                tree[0] = random.randint(slope_start_range[0], slope_start_range[1])
+            tree[2] = 50 / (720 - (tree[1]) + 1)
+            new_img = pygame.transform.scale_by(tree_image, tree[2])
+            screen.blit(new_img, (tree[0] - new_img.width/2, tree[1]-new_img.height))
 
-        pygame.draw.circle(screen, "red", player_pos, 40)
-        screen.blit(image, (player_pos.x - image.width/2, player_pos.y - image.height/2))
+
+        screen.blit(player_image, (player_pos.x - player_image.width/2, player_pos.y - player_image.height/2))
 
         keys = pygame.key.get_pressed()
        
