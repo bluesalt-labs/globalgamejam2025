@@ -40,9 +40,9 @@ def main():
     # trees.append(new_tree)
 
     trees.append([500, 500, 1])
-    trees.append([900, 500, 2])    
+    trees.append([900, 500, 2])
     trees.append([600, 450, 0.5])
-    
+
     while running:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
@@ -53,12 +53,12 @@ def main():
         # fill the screen with a color to wipe away anything from last frame
         screen.fill("light blue")
 
-        
+
         #Draw clouds.
 
         #Draw mountains
         pygame.draw.polygon(screen, "grey", ((600,100), (450, 600), (700, 600)))
-        
+
         pygame.draw.polygon(screen, "grey", ((800,200), (450, 600), (900, 600)))
         #Draw slope
         #draw Sides
@@ -69,8 +69,8 @@ def main():
         #ride surface
         pygame.draw.polygon(screen, "white", ((0,720), (365, 438), (831,438), (1280, 720)))
 
-        
-        
+
+
         # Handle/Draw trees
         # Add new trees?
         for tree in trees:
@@ -81,13 +81,13 @@ def main():
                 tree[0] = random.randint(slope_start_range[0], slope_start_range[1])
             tree[2] = 50 / (720 - (tree[1]) + 1)
             new_img = pygame.transform.scale_by(tree_image, tree[2])
-            screen.blit(new_img, (tree[0] - new_img.width/2, tree[1]-new_img.height))
+            screen.blit(new_img, (tree[0] - new_img.get_width() /2, tree[1]-new_img.get_height()))
 
 
-        screen.blit(player_image, (player_pos.x - player_image.width/2, player_pos.y - player_image.height/2))
+        screen.blit(player_image, (player_pos.x - player_image.get_width()/2, player_pos.y - player_image.get_height()/2))
 
         keys = pygame.key.get_pressed()
-       
+
         if keys[pygame.K_a]:
             player_pos.x -= player_speed * dt
         if keys[pygame.K_d]:
